@@ -34,13 +34,8 @@ def index() -> rx.Component:
     )
 
 
-app = rx.App()
-app.add_page(index)
-
-
-
 class Clock(rx.State):
-    time_elapsed: int = 0 
+    time_elapsed: int = 0
     running: bool = False
 
     @rx.event
@@ -71,8 +66,9 @@ def counter():
             color_scheme="red",
             on_click=Clock.stop,
         ),
-        rx.interval(1000, Clock.tick),  
+        rx.interval(1000, Clock.tick),
     )
+
 
 class TextArea(rx.State):
     text: str = "Output"
@@ -90,3 +86,8 @@ def blur_example():
             on_blur=lambda e: TextArea.set_text(e.target.value),
         ),
     )
+
+
+app = rx.App()
+app.add_page(index)
+app.add_page(counter)

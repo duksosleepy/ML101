@@ -34,39 +34,25 @@ def index() -> rx.Component:
     )
 
 
-class Clock(rx.State):
-    time_elapsed: int = 0
-    running: bool = False
+class MomentLiveState(rx.State):
+    updating: bool = False
 
     @rx.event
-    def start(self):
-        self.time_elapsed = 0
-        self.running = True
-
-    @rx.event
-    def stop(self):
-        self.running = False
-
-    @rx.event
-    def tick(self):
-        if self.running:
-            self.time_elapsed += 1
+    def on_update(self, date):
+        return rx.toast(f"Date updated: {date}")
 
 
-def counter():
-    return rx.flex(
-        rx.button(
-            "Start",
-            color_scheme="green",
-            on_click=Clock.start,
+def timer():
+    return rx.hstack(
+        rx.moment(
+            format="HH:mm:ss",
+            interval=rx.cond(MomentLiveState.updating, 5000, 0),
+            on_change=MomentLiveState.on_update,
         ),
-        rx.heading(Clock.time_elapsed),
-        rx.button(
-            "Stop",
-            color_scheme="red",
-            on_click=Clock.stop,
+        rx.switch(
+            is_checked=MomentLiveState.updating,
+            on_change=MomentLiveState.set_updating,
         ),
-        rx.interval(1000, Clock.tick),
     )
 
 
@@ -90,4 +76,4 @@ def blur_example():
 
 app = rx.App()
 app.add_page(index)
-app.add_page(counter)
+app.add_page(timer)

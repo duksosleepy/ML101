@@ -3,6 +3,22 @@
 import reflex as rx
 
 
+class MicrophoneState(rx.State):
+    is_recording: bool = False
+
+    @rx.event
+    def toggle_recording(self):
+        return rx.call_script("""
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function(stream) {
+                console.log('Microphone access granted');
+            })
+            .catch(function(error) {
+                console.log('Error accessing microphone:', error);
+            });
+        """)
+
+
 class State(rx.State):
     """The app state."""
 
@@ -73,6 +89,7 @@ def index() -> rx.Component:
                                 padding_x="1.5rem",
                                 padding_y="0.5rem",
                                 _hover={"bg": "#0000DD"},
+                                on_click=MicrophoneState.toggle_recording,
                             ),
                             rx.button(
                                 "Copy Text",

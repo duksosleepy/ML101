@@ -1,11 +1,27 @@
 [project]
+dependencies = [
+    "reflex==0.7.1",
+    "ruff>=0.9.10",
+    "librosa",
+    "youtube_dl",
+    "transformers",
+    "httplib2",
+    "torch",
+    "torchaudio",
+    "sentencepiece",
+    "tokenizers",
+    "pyannote.audio",
+    "pyannote.core",
+    "pydub",
+    "speechrecognition>=3.14.1",
+    "pyaudio>=0.2.14",
+]
+
 name = "ml101"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12.5"
-dependencies = ["reflex==0.7.1", "ruff>=0.9.10"]
-
 [tool.uv]
 package = true
 

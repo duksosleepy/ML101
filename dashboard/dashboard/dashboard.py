@@ -23,8 +23,8 @@ class State(rx.State):
     """The app state."""
 
     # State variables
-    language: str = "Spanish"
-    transcribed_text: str = ""
+    language: str = "English"
+    transcribed_text: str = ">"
     is_recording: bool = False
 
     def toggle_recording(self):
@@ -38,7 +38,7 @@ class State(rx.State):
 
 
 def index() -> rx.Component:
-    """Create the main page of the Speech to Text Converter app with dark theme."""
+    """Create the minimal dark-themed Speech to Text Converter page."""
     return rx.box(
         rx.center(
             rx.vstack(
@@ -50,35 +50,40 @@ def index() -> rx.Component:
                 ),
                 rx.box(
                     rx.vstack(
-                        rx.text(
-                            "Select Language:",
-                            text_align="left",
-                            color="white",
-                            font_size="0.9rem",
-                        ),
+                        # Minimal language selector with simple border
                         rx.select(
                             [
-                                "English (United States)",
+                                "English",
                                 "Spanish",
                                 "Vietnamese",
                                 "French",
                                 "German",
                             ],
-                            default_value="Spanish",
+                            default_value="English",
                             color="white",
                             width="100%",
-                            border_color="#4299E1",
-                            bg="#333333",
-                            margin_bottom="1rem",
-                            _focus={"border_color": "#63B3ED"},
-                        ),
-                        rx.box(
-                            height="170px",
-                            width="100%",
-                            bg="#333333",
+                            height="50px",
+                            border="1px solid white",
                             border_radius="md",
-                            border="1px solid #555555",
+                            margin_bottom="1rem",
+                            bg="black",
+                            _focus={"border": "1px solid white"},
+                        ),
+                        # Minimal text area with simple border and ">" character
+                        rx.box(
+                            rx.text(
+                                ">",
+                                color="white",
+                                padding="10px",
+                                height="100%",
+                            ),
+                            height="150px",
+                            width="100%",
+                            bg="black",
+                            border="1px solid white",
+                            border_radius="md",
                             margin_bottom="1.5rem",
+                            overflow="auto",
                         ),
                         rx.hstack(
                             rx.button(
@@ -89,7 +94,6 @@ def index() -> rx.Component:
                                 padding_x="1.5rem",
                                 padding_y="0.5rem",
                                 _hover={"bg": "#0000DD"},
-                                on_click=MicrophoneState.toggle_recording,
                             ),
                             rx.button(
                                 "Copy Text",
@@ -110,9 +114,8 @@ def index() -> rx.Component:
                     ),
                     width="100%",
                     max_width="750px",
-                    bg="#1E1E1E",
+                    bg="black",
                     border_radius="md",
-                    box_shadow="0px 4px 6px rgba(0, 0, 0, 0.5)",
                 ),
                 width="100%",
                 max_width="800px",

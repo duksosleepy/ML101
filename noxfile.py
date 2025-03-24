@@ -5,7 +5,7 @@ Nox configuration file for automation of testing and development tasks.
 from pathlib import Path
 
 from nox import options as nox_options
-from nox import session
+from nox import parametrize, session
 
 # Set Python versions to use for testing
 PYTHON_VERSIONS = ["3.12", "3.13"]
@@ -77,7 +77,9 @@ def format(session):
 
 
 @session(python=PYTHON_VERSIONS)
-def tests(session, hatch=False, vcs=True):
+@parametrize("hatch", [False, True])
+@parametrize("vcs", [False, True])
+def tests(session, hatch, vcs):
     """
     Run tests with pytest.
 

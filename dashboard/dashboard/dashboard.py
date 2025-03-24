@@ -145,10 +145,10 @@ class AudioVisualizerConfig(rx.Base):
     """Configuration for the audio visualizer."""
 
     enabled: bool = True
-    fftSize: int = 1024  # noqa: N815
-    smoothingTimeConstant: float = 0.8  # noqa: N815
-    minDecibels: float = -90  # noqa: N815
-    maxDecibels: float = -10  # noqa: N815
+    fftSize: int = 1024
+    smoothingTimeConstant: float = 0.8
+    minDecibels: float = -90
+    maxDecibels: float = -10
     barColor: str = "#06b6d4"  # cyan-500
     barCount: int = 60
     barWidth: int = 2
@@ -162,8 +162,8 @@ class MediaDeviceInfo(rx.Base):
 
     kind: str
     label: str
-    deviceId: str  # noqa: N815
-    groupId: str  # noqa: N815
+    deviceId: str
+    groupId: str
 
 
 # WebSocket connection state constants
@@ -1344,7 +1344,6 @@ class State(rx.State):
         # We can autoconnect when the page loads
         # return recorder.start()
         # Or leave it to user to start manually
-        pass
 
 
 # Create the audio recorder instance

@@ -24,7 +24,7 @@ active_connections: Dict[str, WebSocket] = {}
 active_transcription_tasks: Dict[str, asyncio.Task] = {}
 
 
-async def process_audio_vosk(session_id: str, websocket: WebSocket):  # noqa: C901
+async def process_audio_vosk(session_id: str, websocket: WebSocket):
     """
     Xử lý audio với Vosk và gửi transcript về client.
 
@@ -110,7 +110,7 @@ async def process_audio_vosk(session_id: str, websocket: WebSocket):  # noqa: C9
             await websocket.send_json(
                 {
                     "type": "error",
-                    "message": f"Transcription error: {str(e)}",
+                    "message": f"Transcription error: {e!s}",
                     "timestamp": time.time() * 1000,
                 }
             )
@@ -123,7 +123,7 @@ async def process_audio_vosk(session_id: str, websocket: WebSocket):  # noqa: C9
             session.is_processing = False
 
 
-async def process_client_message(websocket: WebSocket, session_id: str) -> bool:  # noqa: C901
+async def process_client_message(websocket: WebSocket, session_id: str) -> bool:
     """
     Xử lý tin nhắn đến từ client.
 

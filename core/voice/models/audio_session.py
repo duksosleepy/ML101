@@ -119,11 +119,10 @@ class AudioSession:
         """Thêm transcript vào buffer."""
         if is_partial:
             self.partial_transcript = text
-        else:
-            if text and text.strip():
-                self.transcript_buffer.append(text)
-                self.current_transcript = text
-                self.partial_transcript = ""
+        elif text and text.strip():
+            self.transcript_buffer.append(text)
+            self.current_transcript = text
+            self.partial_transcript = ""
 
     def get_transcript_history(self) -> List[str]:
         """Lấy lịch sử transcript."""

@@ -193,12 +193,11 @@ async def transcribe_file(
                 "language": result.get("language", language),
                 "engine": engine,
             }
-        else:
-            # Xử lý theo từng khúc với các engine khác
-            raise HTTPException(
-                status_code=status.HTTP_501_NOT_IMPLEMENTED,
-                detail=f"Transcription for file not implemented for engine: {engine}",
-            )
+        # Xử lý theo từng khúc với các engine khác
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail=f"Transcription for file not implemented for engine: {engine}",
+        )
 
     except Exception as e:
         # Dọn dẹp file trong trường hợp lỗi
@@ -211,7 +210,7 @@ async def transcribe_file(
 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error transcribing file: {str(e)}",
+            detail=f"Error transcribing file: {e!s}",
         )
 
 

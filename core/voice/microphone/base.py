@@ -63,14 +63,12 @@ class BaseAudioInput(ABC):
         """
         Bắt đầu thu âm.
         """
-        pass
 
     @abstractmethod
     def stop(self):
         """
         Dừng thu âm.
         """
-        pass
 
     @abstractmethod
     def get_device_list(self) -> List[Dict[str, Any]]:
@@ -82,7 +80,6 @@ class BaseAudioInput(ABC):
         List[Dict[str, Any]]
             Danh sách thiết bị
         """
-        pass
 
     @abstractmethod
     def is_available(self) -> bool:
@@ -94,4 +91,3 @@ class BaseAudioInput(ABC):
         bool
             True nếu sẵn sàng, False nếu không
         """
-        pass

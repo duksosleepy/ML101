@@ -92,11 +92,10 @@ class AudioInputRegistry:
             if audio_input.is_available():
                 logger.info(f"Created audio input: {engine_name}")
                 return audio_input
-            else:
-                logger.warning(
-                    f"Created audio input {engine_name} but it's not available"
-                )
-                return None
+            logger.warning(
+                f"Created audio input {engine_name} but it's not available"
+            )
+            return None
 
         except Exception as e:
             logger.error(f"Error creating audio input {engine_name}: {e}")

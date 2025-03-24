@@ -19,13 +19,13 @@ from .registry import AudioInputRegistry
 from .sr_input import SR_AVAILABLE, SpeechRecognitionInput
 
 __all__ = [
-    "BaseAudioInput",
+    "PYAUDIO_AVAILABLE",
+    "SR_AVAILABLE",
     "AudioInputRegistry",
+    "BaseAudioInput",
     "PyAudioInput",
     "SpeechRecognitionInput",
     "create_audio_input",
-    "get_or_create_audio_input",
     "get_available_engines",
-    "PYAUDIO_AVAILABLE",
-    "SR_AVAILABLE",
+    "get_or_create_audio_input",
 ]

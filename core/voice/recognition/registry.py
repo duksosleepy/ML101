@@ -90,11 +90,10 @@ class RecognizerRegistry:
             if recognizer.is_available():
                 logger.info(f"Created recognizer: {engine_name}")
                 return recognizer
-            else:
-                logger.warning(
-                    f"Created recognizer {engine_name} but it's not available"
-                )
-                return None
+            logger.warning(
+                f"Created recognizer {engine_name} but it's not available"
+            )
+            return None
 
         except Exception as e:
             logger.error(f"Error creating recognizer {engine_name}: {e}")

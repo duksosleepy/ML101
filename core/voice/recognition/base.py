@@ -53,14 +53,12 @@ class BaseRecognizer(ABC):
                 "confidence": float # độ tin cậy (nếu có)
             }
         """
-        pass
 
     @abstractmethod
     def reset(self):
         """
         Reset trạng thái của recognizer.
         """
-        pass
 
     @abstractmethod
     def is_available(self) -> bool:
@@ -72,4 +70,3 @@ class BaseRecognizer(ABC):
         bool
             True nếu có thể sử dụng, False nếu không
         """
-        pass

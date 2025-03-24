@@ -1,21 +1,20 @@
 [project]
 dependencies = [
     "reflex==0.7.1",
-    "ruff>=0.9.10",
-    "librosa",
-    "youtube_dl",
-    "transformers",
-    "httplib2",
-    "torch",
-    "torchaudio",
-    "sentencepiece",
-    "tokenizers",
-    "pyannote.audio",
-    "pyannote.core",
-    "pydub",
     "speechrecognition>=3.14.1",
     "pyaudio>=0.2.14",
     "vosk>=0.3.45",
+    "librosa>=0.11.0",
+    "youtube-dl>=2021.12.17",
+    "transformers>=4.49.0",
+    "httplib2>=0.22.0",
+    "torch>=2.6.0",
+    "torchaudio>=2.6.0",
+    "sentencepiece>=0.2.0",
+    "tokenizers>=0.21.1",
+    "pyannote-audio>=3.3.2",
+    "pyannote-core>=5.0.0",
+    "pydub>=0.25.1",
 ]
 
 name = "ml101"
@@ -25,6 +24,7 @@ readme = "README.md"
 requires-python = ">=3.12.5"
 [tool.uv]
 package = true
+default-groups = ["dev"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["core", "dashboard"]
@@ -32,3 +32,116 @@ packages = ["core", "dashboard"]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "codespell>=2.4.1",
+    "commitizen>=4.4.1",
+    "pre-commit>=4.2.0",
+    "pycln>=2.5.0",
+    "pyupgrade>=3.19.1",
+    "ruff>=0.9.10",
+    "yesqa>=1.5.0",
+]
+
+[tool.ruff]
+extend-select = [
+    "ARG",  # flake8-unused-arguments
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "EM",   # flake8-errmsg
+    "EXE",  # flake8-executable
+    "FURB", # refurb
+    "G",    # flake8-logging-format
+    "I",    # isort
+    "ICN",  # flake8-import-conventions
+    "NPY",  # NumPy specific rules
+    "PD",   # pandas-vet
+    "PGH",  # pygrep-hooks
+    "PIE",  # flake8-pie
+    "PL",   # pylint
+    "PT",   # flake8-pytest-style
+    "PTH",  # flake8-use-pathlib
+    "PYI",  # flake8-pyi
+    "RET",  # flake8-return
+    "RUF",  # Ruff-specific
+    "SIM",  # flake8-simplify
+    "T20",  # flake8-print
+    "UP",   # pyupgrade
+    "YTT",  # flake8-2020
+]
+
+ignore = [
+    "ISC001",  # Conflicts with formatter
+    "PLR09",   # Too many <...>
+    "PLR2004", # Magic value used in comparison
+]
+
+line-length = 88
+
+exclude = [
+    ".git",
+    "__pycache__",
+    ".ruff_cache",
+    "alembic",
+    "venv",
+    ".venv",
+    "build",
+    "dist",
+]
+
+[tool.ruff.isort]
+
+known-first-party = ["core", "dashboard"]
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.per-file-ignores]
+"**/config.py" = ["N806"]
+"tests/**" = ["D"]
+"__init__.py" = ["F401", "E402"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | alembic
+)/
+'''
+
+[tool.pycln]
+all = true
+
+[tool.mypy]
+files = ["core", "dashboard"]
+python_version = "3.12"
+strict = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+warn_unreachable = true
+
+
+[[tool.mypy.overrides]]
+module = ["numpy.*"]
+ignore_missing_imports = true
+
+
+[tool.commitizen]
+name = "cz_conventional_commits" # Uses the conventional commits standard
+tag_format = "v$version" # Customizes the tag format
+version_scheme = "pep440" # Follows the PEP 440 version scheme
+version_provider = "pep621" # Uses standard pep for version management
+update_changelog_on_bump = true # Automatically updates the CHANGELOG when the version is bumped

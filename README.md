@@ -194,30 +194,66 @@ transcription.stop()
 ## Cấu trúc dự án
 
 ```
-audio_streaming_api/
-├── app.py                  # Khởi tạo ứng dụng FastAPI
-├── config.py               # Cấu hình chung
-├── main.py                 # Điểm bắt đầu để chạy API server
-├── models/                 # Mô hình dữ liệu
-│   ├── audio_session.py    # Model AudioSession
-│   └── schemas.py          # Pydantic schemas
-├── recognition/            # Xử lý nhận dạng giọng nói
-│   ├── base.py             # Lớp cơ sở cho recognizer
-│   ├── vosk_recognizer.py  # Vosk implementation
-│   ├── whisper_recognizer.py # Whisper implementation
-│   ├── sr_recognizer.py    # SpeechRecognition implementation
-│   └── factory.py          # Factory pattern để tạo recognizer
-├── microphone/             # Xử lý thu âm từ microphone
-│   ├── base.py             # Lớp cơ sở cho audio input
-│   ├── pyaudio_input.py    # PyAudio implementation
-│   ├── sr_input.py         # SpeechRecognition implementation
-│   └── factory.py          # Factory pattern để tạo audio input
-├── routes/                 # Các API endpoint
-│   ├── websocket.py        # WebSocket endpoints
-│   └── api.py              # REST API endpoints
-├── utils/                  # Tiện ích
-│   └── audio_processing.py # Các hàm xử lý audio
-└── realtime_transcription.py  # Ứng dụng độc lập
+
+Directory structure:
+└── duksosleepy-ml101/
+    ├── README.md
+    ├── main.py
+    ├── pyproject.toml
+    ├── requirements.txt
+    ├── uv.lock
+    ├── .python-version
+    ├── core/
+    │   ├── __init__.py
+    │   ├── main.py
+    │   ├── __pycache__/
+    │   └── voice/
+    │       ├── __init__.py
+    │       ├── app.py
+    │       ├── config.py
+    │       ├── realtime_transcription.py
+    │       ├── __pycache__/
+    │       ├── microphone/
+    │       │   ├── __init__.py
+    │       │   ├── base.py
+    │       │   ├── factory.py
+    │       │   ├── pyaudio_input.py
+    │       │   ├── registry.py
+    │       │   └── sr_input.py
+    │       ├── models/
+    │       │   ├── __init__.py
+    │       │   ├── audio_session.py
+    │       │   ├── recognition.py
+    │       │   └── schemas.py
+    │       ├── recognition/
+    │       │   ├── __init__.py
+    │       │   ├── base.py
+    │       │   ├── factory.py
+    │       │   ├── registry.py
+    │       │   ├── sr_recognizer.py
+    │       │   ├── vosk_recognizer.py
+    │       │   ├── whisper_recognizer.py
+    │       │   └── __pycache__/
+    │       ├── routes/
+    │       │   ├── __init__.py
+    │       │   ├── api.py
+    │       │   └── websocket.py
+    │       └── utils/
+    │           ├── __init__.py
+    │           └── audio_processing.py
+    └── dashboard/
+        ├── alembic.ini
+        ├── rxconfig.py
+        ├── .gitignore
+        ├── alembic/
+        │   ├── env.py
+        │   ├── README
+        │   └── script.py.mako
+        ├── assets/
+        └── dashboard/
+            ├── __init__.py
+            └── dashboard.py
+
 ```
 
 ## Giấy phép

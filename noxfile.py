@@ -2,13 +2,13 @@
 Nox configuration file for automation of testing and development tasks.
 """
 
-import os
 from pathlib import Path
 
-import nox
+from nox import options as nox_options
+from nox import session
 
 # Set Python versions to use for testing
-PYTHON_VERSIONS = ["3.11", "3.12", "3.13"]
+PYTHON_VERSIONS = ["3.12", "3.13"]
 DEFAULT_PYTHON = "3.12"
 
 # Default environment for all sessions
@@ -16,11 +16,11 @@ DEFAULT_ENV = {
     "FORCE_COLOR": "3",
 }
 
-# Don't create .nox directory if in CI
-nox.options.error_on_external_run = True
-nox.options.error_on_missing_interpreters = False
-nox.options.reuse_existing_virtualenvs = os.environ.get("CI") != "true"
-nox.options.sessions = ["lint", "tests"]
+
+nox_options.error_on_external_run = True
+nox_options.error_on_missing_interpreters = False
+nox_options.reuse_existing_virtualenvs = True
+nox_options.sessions = ["lint", "tests"]
 
 # Directories to exclude
 EXCLUDE_PATHS = [
@@ -37,13 +37,15 @@ EXCLUDE_PATHS = [
 ]
 
 
-@nox.session
+@session
 def lint(session):
     """
     Run all linting tasks.
     """
     session.install("-r", "requirements.txt")
-    session.install("ruff", "flake8", "flake8-bugbear", "mypy", "codespell")
+    session.install(
+        "ruff", "flake8", "flake8-bugbear", "black", "mypy", "codespell"
+    )
 
     print("Running ruff...")
     session.run("ruff", "check", ".")
@@ -60,15 +62,12 @@ def lint(session):
     )
 
 
-@nox.session
+@session
 def format(session):
     """
     Run code formatting tools.
     """
-    session.install("black", "ruff", "pycln", "pyupgrade")
-
-    print("Running black...")
-    session.run("black", "core", "dashboard")
+    session.install("ruff", "pycln", "pyupgrade")
 
     print("Running ruff with --fix...")
     session.run("ruff", "check", "--fix", ".")
@@ -77,7 +76,7 @@ def format(session):
     session.run("pycln", "--all", "core", "dashboard")
 
 
-@nox.session(python=PYTHON_VERSIONS)
+@session(python=PYTHON_VERSIONS)
 def tests(session, hatch=False, vcs=True):
     """
     Run tests with pytest.
@@ -115,7 +114,7 @@ def tests(session, hatch=False, vcs=True):
         session.run(*test_args, env=env)
 
 
-@nox.session
+@session
 def nox(session, hatch=False, vcs=True):
     """
     Run noxfile tests - this validates the noxfile itself.
@@ -148,7 +147,7 @@ def nox(session, hatch=False, vcs=True):
         session.log("Non-hatch nox testing not configured. Use hatch=True")
 
 
-@nox.session
+@session
 def docs(session):
     """
     Build documentation.

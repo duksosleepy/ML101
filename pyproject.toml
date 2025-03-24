@@ -38,6 +38,7 @@ dev = [
     "black>=25.1.0",
     "codespell>=2.4.1",
     "commitizen>=4.4.1",
+    "nox>=2025.2.9",
     "pre-commit>=4.2.0",
     "pycln>=2.5.0",
     "pyupgrade>=3.19.1",

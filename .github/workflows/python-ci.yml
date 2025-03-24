@@ -68,8 +68,8 @@ jobs:
 
       - name: Test hatch
         run: |
-          nox -s 'nox(hatch, vcs)'
-          nox -s 'nox(hatch, vcs)' -- docs
+          nox -s 'tests' -- --hatch=True --vcs=False
+          nox -s 'tests' -- --hatch=True --vcs=True
 
   lint:
     runs-on: ubuntu-latest

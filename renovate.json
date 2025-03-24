@@ -1,0 +1,69 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "lockFileMaintenance": {
+        "enabled": true
+    },
+    "extends": [
+        "config:base",
+        ":enablePreCommit",
+        "helpers:pinGitHubActionDigests",
+        "local>uis/devops/renovate-config"
+    ],
+    "labels": [
+        "dependencies"
+    ],
+    "packageRules": [
+        {
+            "matchUpdateTypes": [
+                "minor",
+                "patch",
+                "pin",
+                "digest"
+            ],
+            "automerge": true
+        },
+        {
+            "matchDepTypes": [
+                "dev-dependencies"
+            ],
+            "automerge": true
+        },
+        {
+            "matchPackagePatterns": [
+                "^pre-commit",
+                "^black",
+                "^ruff",
+                "^pytest"
+            ],
+            "groupName": "linting & testing packages",
+            "automerge": true
+        },
+        {
+            "matchPackagePatterns": [
+                "^torch",
+                "^torchaudio"
+            ],
+            "groupName": "pytorch packages"
+        }
+    ],
+    "pip_requirements": {
+        "fileMatch": [
+            "requirements.txt",
+            "requirements/.+\\.txt$"
+        ]
+    },
+    "python": {
+        "enabled": true
+    },
+    "enabledManagers": [
+        "github-actions",
+        "pip_requirements",
+        "pip_setup",
+        "setup-cfg",
+        "pep621",
+        "pre-commit"
+    ],
+    "schedule": [
+        "every weekend"
+    ]
+}

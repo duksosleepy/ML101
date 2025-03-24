@@ -67,6 +67,11 @@ repos:
     hooks:
     - id: bandit
 
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.23.1
+    hooks:
+      - id: gitleaks
+
   - repo: https://github.com/asottile/pyupgrade
     rev: "v3.19.1"
     hooks:

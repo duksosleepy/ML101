@@ -4,15 +4,21 @@
         "enabled": true
     },
     "extends": [
-        "config:base",
+        "config:recommended",
+        "config:recommended",
         ":enablePreCommit",
-        "helpers:pinGitHubActionDigests",
-        "local>uis/devops/renovate-config"
+        "helpers:pinGitHubActionDigests"
     ],
     "labels": [
         "dependencies"
     ],
     "packageRules": [
+        {
+            "matchCategories": [
+                "python"
+            ],
+            "enabled": true
+        },
         {
             "matchUpdateTypes": [
                 "minor",
@@ -29,21 +35,28 @@
             "automerge": true
         },
         {
-            "matchPackagePatterns": [
-                "^pre-commit",
-                "^black",
-                "^ruff",
-                "^pytest"
-            ],
             "groupName": "linting & testing packages",
-            "automerge": true
+            "automerge": true,
+            "matchPackageNames": [
+                "/^pre-commit/",
+                "/^black/",
+                "/^ruff/",
+                "/^pytest/"
+            ]
         },
         {
-            "matchPackagePatterns": [
-                "^torch",
-                "^torchaudio"
-            ],
-            "groupName": "pytorch packages"
+            "groupName": "pytorch packages",
+            "matchPackageNames": [
+                "/^torch/",
+                "/^torchaudio/"
+            ]
+        },
+        {
+            "groupName": "pyannote packages",
+            "matchPackageNames": [
+                "/^pyannote-audio/",
+                "/^pyannote-core/"
+            ]
         }
     ],
     "pip_requirements": {
@@ -52,8 +65,10 @@
             "requirements/.+\\.txt$"
         ]
     },
-    "python": {
-        "enabled": true
+    "pep621": {
+        "fileMatch": [
+            "(^|/)pyproject\\.toml$"
+        ]
     },
     "enabledManagers": [
         "github-actions",
@@ -65,5 +80,6 @@
     ],
     "schedule": [
         "every weekend"
-    ]
+    ],
+    "dependencyDashboard": true
 }

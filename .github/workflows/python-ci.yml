@@ -24,7 +24,6 @@ jobs:
       matrix:
         python-version:
           - "3.12"
-          - "3.13"
         runs-on:
           - ubuntu-latest
           - windows-latest
@@ -50,6 +49,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-pyaudio portaudio19-dev
 
+      # macOS specific steps
       - name: Cache Homebrew packages
         if: runner.os == 'macOS'
         uses: actions/cache@v4
@@ -64,60 +64,39 @@ jobs:
         run: |
           brew install portaudio
 
-      - name: Setup Python with x86_64 architecture on macOS ARM
-        if: runner.os == 'macOS' && runner.arch == 'ARM64'
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          allow-prereleases: true
-          architecture: x64
-
-      - name: Setup Python normally for other platforms
-        if: runner.os != 'macOS' || runner.arch != 'ARM64'
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          allow-prereleases: true
-
       - name: Setup uv
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
       - name: Install the project
-        run: |
-          if [ "$RUNNER_OS" == "macOS" ] && [ "$RUNNER_ARCH" == "ARM64" ]; then
-            echo "macOS ARM64 detected - installing with x86_64 architecture"
-            arch -x86_64 uv sync --all-extras --dev || uv sync --all-extras --dev --exclude vosk
-          elif [ "$RUNNER_OS" == "macOS" ]; then
-            echo "macOS detected - installing without vosk if needed"
-            uv sync --all-extras --dev || uv sync --all-extras --dev --exclude vosk
-          else
-            echo "Installing all dependencies including vosk"
-            uv sync --all-extras --dev
-          fi
-        env:
-          RUNNER_OS: ${{ runner.os }}
-          RUNNER_ARCH: ${{ runner.arch }}
+        run: uv sync --all-extras --dev
 
       - name: Install nox
         run: uv tool install nox
 
-      - name: Activate .venv
+      - name: Activate .venv (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host "Activating virtual environment on Windows"
+          .\.venv\Scripts\activate
+
+      - name: Activate .venv (Linux/macOS)
+        if: runner.os != 'Windows'
         shell: bash
         run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            echo ".\.venv\Scripts\activate"
-            .\.venv\Scripts\activate
-          else
-            echo "source .venv/bin/activate"
-            source .venv/bin/activate
-          fi
-        env:
-          RUNNER_OS: ${{ runner.os }}
+          echo "Activating virtual environment on Linux/macOS"
+          source .venv/bin/activate
 
       - name: Run hatch tests
+        shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
         run: |
           nox -s 'tests' -- --hatch=True --vcs=False
           nox -s 'tests' -- --hatch=True --vcs=True
@@ -149,15 +128,7 @@ jobs:
       - name: Activate .venv
         shell: bash
         run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            echo ".\.venv\Scripts\activate"
-            .\.venv\Scripts\activate
-          else
-            echo "source .venv/bin/activate"
-            source .venv/bin/activate
-          fi
-        env:
-          RUNNER_OS: ${{ runner.os }}
+          source .venv/bin/activate
 
       - uses: tox-dev/action-pre-commit-uv@v1
 
@@ -202,15 +173,7 @@ jobs:
       - name: Activate .venv
         shell: bash
         run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            echo ".\.venv\Scripts\activate"
-            .\.venv\Scripts\activate
-          else
-            echo "source .venv/bin/activate"
-            source .venv/bin/activate
-          fi
-        env:
-          RUNNER_OS: ${{ runner.os }}
+          source .venv/bin/activate
 
       - name: Run tests with tox
         run: >

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Dict, List, cast
+from typing import Any, cast
 
 import reflex as rx
 from jinja2 import Environment
@@ -71,9 +71,7 @@ const extractEntry = (entry) => ({
         if on_intersect is None and on_non_intersect is None:
             return []
         on_intersect = (
-            rx.Var.create(on_intersect)
-            if on_intersect is not None
-            else "undefined"
+            rx.Var.create(on_intersect) if on_intersect is not None else "undefined"
         )
         on_non_intersect = (
             rx.Var.create(on_non_intersect)
@@ -183,9 +181,7 @@ class AudioVisualizer(rx.Component):
 
     # Component properties
     stream: rx.Var[str]
-    config: rx.Var[AudioVisualizerConfig] = rx.Var.create(
-        AudioVisualizerConfig()
-    )
+    config: rx.Var[AudioVisualizerConfig] = rx.Var.create(AudioVisualizerConfig())
 
     @classmethod
     def create(cls, *children, **props) -> AudioVisualizer:
@@ -740,9 +736,7 @@ const createAudioProcessor = (stream, options = {}) => {
             "on_connection_state_change"
         )
         if isinstance(on_connection_state_change, rx.EventChain):
-            on_connection_state_change = rx.Var.create(
-                on_connection_state_change
-            )
+            on_connection_state_change = rx.Var.create(on_connection_state_change)
 
         on_error = self.event_triggers.get("on_error")
         if isinstance(on_error, rx.EventChain):
@@ -1217,19 +1211,19 @@ useEffect(() => {
         )
 
     @property
-    def media_devices(self) -> rx.Var[List[MediaDeviceInfo]]:
+    def media_devices(self) -> rx.Var[list[MediaDeviceInfo]]:
         """Available media devices."""
         return rx.Var(
             f"(refs['mediadevices_{self.get_ref()}'])",
-            _var_type=List[MediaDeviceInfo],
+            _var_type=list[MediaDeviceInfo],
         )
 
     @property
-    def stats(self) -> rx.Var[Dict[str, Any]]:
+    def stats(self) -> rx.Var[dict[str, Any]]:
         """Streaming statistics."""
         return rx.Var(
             f"(refs['stats_{self.get_ref()}'])",
-            _var_type=Dict[str, Any],
+            _var_type=dict[str, Any],
         )
 
     @property
@@ -1274,10 +1268,10 @@ class State(rx.State):
         """Handle errors."""
         self.has_error = True
         self.error_message = error_msg
-        print(f"Error: {error_msg}")  # noqa: T201
+        print(f"Error: {error_msg}")
 
     @rx.event
-    def on_data_received(self, data: Dict[str, Any]):
+    def on_data_received(self, data: dict[str, Any]):
         """Handle data received from the server."""
         if data.get("type") == "transcript" and "text" in data:
             self.transcript.append(data["text"])
@@ -1412,9 +1406,7 @@ def transcript() -> rx.Component:
     """Create a transcript display area."""
     return rx.scroll_area(
         rx.vstack(
-            rx.foreach(
-                State.transcript, lambda text: rx.text(text, width="100%")
-            ),
+            rx.foreach(State.transcript, lambda text: rx.text(text, width="100%")),
             intersection_observer(
                 height="1px",
                 id="end-of-transcript",
@@ -1458,9 +1450,7 @@ def stats_display() -> rx.Component:
                     ),
                     rx.grid_item(
                         rx.stat(
-                            rx.stat_number(
-                                f"{recorder.stats.packetsTransferred}"
-                            ),
+                            rx.stat_number(f"{recorder.stats.packetsTransferred}"),
                             rx.stat_help_text("Packets Sent"),
                         ),
                         col_span=1,
@@ -1474,18 +1464,14 @@ def stats_display() -> rx.Component:
                     ),
                     rx.grid_item(
                         rx.stat(
-                            rx.stat_number(
-                                f"{recorder.stats.connectionUptime} s"
-                            ),
+                            rx.stat_number(f"{recorder.stats.connectionUptime} s"),
                             rx.stat_help_text("Connection Uptime"),
                         ),
                         col_span=1,
                     ),
                     rx.grid_item(
                         rx.stat(
-                            rx.stat_number(
-                                f"{recorder.stats.reconnectAttempts}"
-                            ),
+                            rx.stat_number(f"{recorder.stats.reconnectAttempts}"),
                             rx.stat_help_text("Reconnect Attempts"),
                         ),
                         col_span=1,
@@ -1597,9 +1583,7 @@ def index() -> rx.Component:
                                             rx.form_label("Sample Rate"),
                                             rx.select.root(
                                                 rx.select.trigger(
-                                                    rx.text(
-                                                        f"{State.sample_rate} Hz"
-                                                    ),
+                                                    rx.text(f"{State.sample_rate} Hz"),
                                                 ),
                                                 rx.select.content(
                                                     rx.select.item(
@@ -1631,9 +1615,7 @@ def index() -> rx.Component:
                                             rx.cond(
                                                 recorder.media_devices,
                                                 input_device_select(),
-                                                rx.text(
-                                                    "Loading input devices..."
-                                                ),
+                                                rx.text("Loading input devices..."),
                                             ),
                                         ),
                                         col_span=2,

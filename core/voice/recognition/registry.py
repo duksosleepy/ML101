@@ -2,7 +2,7 @@
 Registry cho các speech recognizer.
 """
 
-from typing import Callable, Dict, List, Optional, Type
+from collections.abc import Callable
 
 from ..config import logger
 from .base import BaseRecognizer
@@ -15,17 +15,17 @@ class RecognizerRegistry:
     """
 
     # Dictionary để lưu trữ các lớp recognizer
-    _recognizers: Dict[str, Type[BaseRecognizer]] = {}
+    _recognizers: dict[str, type[BaseRecognizer]] = {}
 
     # Dictionary để lưu trữ các điều kiện khả dụng
-    _availability_conditions: Dict[str, Callable[[], bool]] = {}
+    _availability_conditions: dict[str, Callable[[], bool]] = {}
 
     @classmethod
     def register(
         cls,
         engine_name: str,
-        recognizer_class: Type[BaseRecognizer],
-        availability_condition: Optional[Callable[[], bool]] = None,
+        recognizer_class: type[BaseRecognizer],
+        availability_condition: Callable[[], bool] | None = None,
     ):
         """
         Đăng ký một lớp recognizer với registry.
@@ -47,9 +47,7 @@ class RecognizerRegistry:
         logger.debug(f"Registered recognizer: {engine_name}")
 
     @classmethod
-    def create_recognizer(
-        cls, engine_name: str, **kwargs
-    ) -> Optional[BaseRecognizer]:
+    def create_recognizer(cls, engine_name: str, **kwargs) -> BaseRecognizer | None:
         """
         Tạo một instance của recognizer theo tên.
 
@@ -90,9 +88,7 @@ class RecognizerRegistry:
             if recognizer.is_available():
                 logger.info(f"Created recognizer: {engine_name}")
                 return recognizer
-            logger.warning(
-                f"Created recognizer {engine_name} but it's not available"
-            )
+            logger.warning(f"Created recognizer {engine_name} but it's not available")
             return None
 
         except Exception as e:
@@ -100,7 +96,7 @@ class RecognizerRegistry:
             return None
 
     @classmethod
-    def create_auto_recognizer(cls, **kwargs) -> Optional[BaseRecognizer]:
+    def create_auto_recognizer(cls, **kwargs) -> BaseRecognizer | None:
         """
         Tự động chọn và tạo recognizer phù hợp nhất dựa trên tính khả dụng.
 
@@ -135,15 +131,13 @@ class RecognizerRegistry:
                         logger.info(f"Auto-selected recognizer: {engine_name}")
                         return recognizer
                 except Exception as e:
-                    logger.debug(
-                        f"Error creating recognizer {engine_name}: {e}"
-                    )
+                    logger.debug(f"Error creating recognizer {engine_name}: {e}")
 
         logger.warning("No suitable recognizer found")
         return None
 
     @classmethod
-    def get_available_engines(cls) -> List[str]:
+    def get_available_engines(cls) -> list[str]:
         """
         Lấy danh sách các engine có sẵn.
 

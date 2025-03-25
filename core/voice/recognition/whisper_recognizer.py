@@ -3,7 +3,7 @@ Speech recognizer sử dụng OpenAI Whisper.
 """
 
 import time
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 
@@ -147,7 +147,7 @@ class WhisperRecognizer(BaseRecognizer):
 
         return result
 
-    def transcribe_file(self, file_path: str) -> Dict[str, Any]:
+    def transcribe_file(self, file_path: str) -> dict[str, Any]:
         """
         Transcribe audio từ file.
 
@@ -209,6 +209,4 @@ class WhisperRecognizer(BaseRecognizer):
 
 
 # Đăng ký recognizer với registry
-RecognizerRegistry.register(
-    "whisper", WhisperRecognizer, lambda: WHISPER_AVAILABLE
-)
+RecognizerRegistry.register("whisper", WhisperRecognizer, lambda: WHISPER_AVAILABLE)

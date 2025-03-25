@@ -4,7 +4,7 @@ Audio input processor sử dụng PyAudio.
 
 import threading
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ..config import logger
 from .base import BaseAudioInput
@@ -34,7 +34,7 @@ class PyAudioInput(BaseAudioInput):
         channels: int = 1,
         format: int = None,
         frames_per_buffer: int = 4096,
-        device_index: Optional[int] = None,
+        device_index: int | None = None,
         **kwargs,
     ):
         super().__init__(sample_rate, channels, **kwargs)
@@ -54,7 +54,7 @@ class PyAudioInput(BaseAudioInput):
             except Exception as e:
                 logger.error(f"Error initializing PyAudio: {e}")
 
-    def get_device_list(self) -> List[Dict[str, Any]]:
+    def get_device_list(self) -> list[dict[str, Any]]:
         """
         Lấy danh sách thiết bị âm thanh.
 
@@ -72,23 +72,15 @@ class PyAudioInput(BaseAudioInput):
             num_devices = info.get("deviceCount")
 
             for i in range(num_devices):
-                device_info = (
-                    self.audio.get_device_info_by_host_api_device_index(0, i)
-                )
-                if (
-                    device_info.get("maxInputChannels") > 0
-                ):  # Chỉ lấy input devices
+                device_info = self.audio.get_device_info_by_host_api_device_index(0, i)
+                if device_info.get("maxInputChannels") > 0:  # Chỉ lấy input devices
                     devices.append(
                         {
                             "index": i,
                             "name": device_info.get("name"),
                             "channels": device_info.get("maxInputChannels"),
-                            "sample_rate": int(
-                                device_info.get("defaultSampleRate")
-                            ),
-                            "latency": device_info.get(
-                                "defaultLowInputLatency"
-                            ),
+                            "sample_rate": int(device_info.get("defaultSampleRate")),
+                            "latency": device_info.get("defaultLowInputLatency"),
                         }
                     )
         except Exception as e:
@@ -117,9 +109,7 @@ class PyAudioInput(BaseAudioInput):
                 input=True,
                 input_device_index=self.device_index,
                 frames_per_buffer=self.frames_per_buffer,
-                stream_callback=self._audio_callback
-                if self.callbacks
-                else None,
+                stream_callback=self._audio_callback if self.callbacks else None,
             )
 
             # Nếu không có callback, đọc dữ liệu thủ công

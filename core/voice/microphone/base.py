@@ -3,7 +3,8 @@ Lớp cơ sở cho thu âm từ microphone.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Callable, ClassVar, Dict, List
+from collections.abc import Callable
+from typing import Any, ClassVar
 
 
 class BaseAudioInput(ABC):
@@ -71,7 +72,7 @@ class BaseAudioInput(ABC):
         """
 
     @abstractmethod
-    def get_device_list(self) -> List[Dict[str, Any]]:
+    def get_device_list(self) -> list[dict[str, Any]]:
         """
         Lấy danh sách thiết bị âm thanh.
 

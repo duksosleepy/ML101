@@ -9,7 +9,6 @@ import argparse
 import signal
 import sys
 import time
-from typing import Optional
 
 # Import các module đã tạo
 from config import logger
@@ -29,7 +28,7 @@ class RealtimeTranscription:
         recognition_engine: str = "auto",
         language: str = "vi",
         sample_rate: int = 16000,
-        device_index: Optional[int] = None,
+        device_index: int | None = None,
         partial_results: bool = True,
         vad_enabled: bool = True,
         vad_threshold: float = 0.3,

@@ -24,9 +24,7 @@ class SpeechRecognitionRecognizer(BaseRecognizer):
     # Khai báo tên engine cho registry
     engine_name = "sr"
 
-    def __init__(
-        self, sample_rate: int = 16000, language: str = "vi", **kwargs
-    ):
+    def __init__(self, sample_rate: int = 16000, language: str = "vi", **kwargs):
         super().__init__(sample_rate, language)
         self.recognizer = None
         self.initialize()
@@ -213,6 +211,4 @@ class SpeechRecognitionRecognizer(BaseRecognizer):
 
 
 # Đăng ký recognizer với registry
-RecognizerRegistry.register(
-    "sr", SpeechRecognitionRecognizer, lambda: SR_AVAILABLE
-)
+RecognizerRegistry.register("sr", SpeechRecognitionRecognizer, lambda: SR_AVAILABLE)

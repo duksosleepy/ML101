@@ -4,7 +4,6 @@ Mô hình session cho audio streaming và transcription.
 
 from collections import deque
 from datetime import datetime
-from typing import Dict, List, Optional
 
 from ..config import logger
 from ..models.schemas import AudioMetadata, TranscriptionConfig
@@ -124,7 +123,7 @@ class AudioSession:
             self.current_transcript = text
             self.partial_transcript = ""
 
-    def get_transcript_history(self) -> List[str]:
+    def get_transcript_history(self) -> list[str]:
         """Lấy lịch sử transcript."""
         return self.transcript_buffer
 
@@ -141,13 +140,13 @@ class SessionManager:
     """
 
     def __init__(self):
-        self.sessions: Dict[str, AudioSession] = {}
+        self.sessions: dict[str, AudioSession] = {}
 
     def create_session(
         self,
         session_id: str,
-        metadata: Optional[AudioMetadata] = None,
-        config: Optional[TranscriptionConfig] = None,
+        metadata: AudioMetadata | None = None,
+        config: TranscriptionConfig | None = None,
     ) -> AudioSession:
         """Tạo session mới hoặc trả về session có sẵn."""
         if session_id in self.sessions:
@@ -158,7 +157,7 @@ class SessionManager:
         logger.info(f"Created new session: {session_id}")
         return session
 
-    def get_session(self, session_id: str) -> Optional[AudioSession]:
+    def get_session(self, session_id: str) -> AudioSession | None:
         """Lấy session theo ID."""
         return self.sessions.get(session_id)
 
@@ -168,7 +167,7 @@ class SessionManager:
             del self.sessions[session_id]
             logger.info(f"Deleted session: {session_id}")
 
-    def get_all_sessions(self) -> Dict[str, AudioSession]:
+    def get_all_sessions(self) -> dict[str, AudioSession]:
         """Lấy tất cả sessions."""
         return self.sessions
 

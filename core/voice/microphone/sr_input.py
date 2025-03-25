@@ -4,7 +4,7 @@ Audio input processor sử dụng SpeechRecognition.
 
 import threading
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ..config import logger
 from .base import BaseAudioInput
@@ -34,16 +34,14 @@ class SpeechRecognitionInput(BaseAudioInput):
         self,
         sample_rate: int = 16000,
         channels: int = 1,
-        device_index: Optional[int] = None,
+        device_index: int | None = None,
         chunk_duration: float = 0.5,
         **kwargs,
     ):
         super().__init__(sample_rate, channels, **kwargs)
 
         self.device_index = device_index
-        self.chunk_duration = (
-            chunk_duration  # Duration of each audio chunk in seconds
-        )
+        self.chunk_duration = chunk_duration  # Duration of each audio chunk in seconds
         self.chunk_samples = int(self.sample_rate * self.chunk_duration)
 
         self.recognizer = None
@@ -62,7 +60,7 @@ class SpeechRecognitionInput(BaseAudioInput):
             except Exception as e:
                 logger.error(f"Error initializing SpeechRecognition: {e}")
 
-    def get_device_list(self) -> List[Dict[str, Any]]:
+    def get_device_list(self) -> list[dict[str, Any]]:
         """
         Lấy danh sách thiết bị âm thanh.
 
@@ -188,9 +186,7 @@ class SpeechRecognitionInput(BaseAudioInput):
             True nếu sẵn sàng, False nếu không
         """
         return (
-            SR_AVAILABLE
-            and self.recognizer is not None
-            and self.microphone is not None
+            SR_AVAILABLE and self.recognizer is not None and self.microphone is not None
         )
 
     def __del__(self):

@@ -2,8 +2,6 @@
 Các hàm tiện ích để xử lý audio.
 """
 
-from typing import Tuple
-
 import numpy as np
 
 from ..config import logger
@@ -68,7 +66,7 @@ def int16_to_float32(audio_data: bytes) -> bytes:
 
 def detect_voice_activity(
     audio_data: bytes, threshold: float = 0.3
-) -> Tuple[bool, float]:
+) -> tuple[bool, float]:
     """
     Kiểm tra xem có giọng nói trong audio hay không.
 

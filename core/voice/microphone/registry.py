@@ -2,7 +2,7 @@
 Registry cho các audio input processor.
 """
 
-from typing import Callable, Dict, List, Optional, Type
+from collections.abc import Callable
 
 from ..config import logger
 from .base import BaseAudioInput
@@ -15,17 +15,17 @@ class AudioInputRegistry:
     """
 
     # Dictionary để lưu trữ các lớp audio input
-    _inputs: Dict[str, Type[BaseAudioInput]] = {}
+    _inputs: dict[str, type[BaseAudioInput]] = {}
 
     # Dictionary để lưu trữ các điều kiện khả dụng
-    _availability_conditions: Dict[str, Callable[[], bool]] = {}
+    _availability_conditions: dict[str, Callable[[], bool]] = {}
 
     @classmethod
     def register(
         cls,
         engine_name: str,
-        input_class: Type[BaseAudioInput],
-        availability_condition: Optional[Callable[[], bool]] = None,
+        input_class: type[BaseAudioInput],
+        availability_condition: Callable[[], bool] | None = None,
     ):
         """
         Đăng ký một lớp audio input với registry.
@@ -47,9 +47,7 @@ class AudioInputRegistry:
         logger.debug(f"Registered audio input: {engine_name}")
 
     @classmethod
-    def create_audio_input(
-        cls, engine_name: str, **kwargs
-    ) -> Optional[BaseAudioInput]:
+    def create_audio_input(cls, engine_name: str, **kwargs) -> BaseAudioInput | None:
         """
         Tạo một instance của audio input theo tên.
 
@@ -80,9 +78,7 @@ class AudioInputRegistry:
         if engine_name in cls._availability_conditions:
             condition = cls._availability_conditions[engine_name]
             if not condition():
-                logger.warning(
-                    f"Audio input engine {engine_name} is not available"
-                )
+                logger.warning(f"Audio input engine {engine_name} is not available")
                 return None
 
         try:
@@ -92,9 +88,7 @@ class AudioInputRegistry:
             if audio_input.is_available():
                 logger.info(f"Created audio input: {engine_name}")
                 return audio_input
-            logger.warning(
-                f"Created audio input {engine_name} but it's not available"
-            )
+            logger.warning(f"Created audio input {engine_name} but it's not available")
             return None
 
         except Exception as e:
@@ -102,7 +96,7 @@ class AudioInputRegistry:
             return None
 
     @classmethod
-    def create_auto_audio_input(cls, **kwargs) -> Optional[BaseAudioInput]:
+    def create_auto_audio_input(cls, **kwargs) -> BaseAudioInput | None:
         """
         Tự động chọn và tạo audio input phù hợp nhất dựa trên tính khả dụng.
 
@@ -137,15 +131,13 @@ class AudioInputRegistry:
                         logger.info(f"Auto-selected audio input: {engine_name}")
                         return audio_input
                 except Exception as e:
-                    logger.debug(
-                        f"Error creating audio input {engine_name}: {e}"
-                    )
+                    logger.debug(f"Error creating audio input {engine_name}: {e}")
 
         logger.warning("No suitable audio input found")
         return None
 
     @classmethod
-    def get_available_engines(cls) -> List[str]:
+    def get_available_engines(cls) -> list[str]:
         """
         Lấy danh sách các engine có sẵn.
 

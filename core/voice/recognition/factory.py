@@ -2,8 +2,6 @@
 Factory pattern để tạo và quản lý recognizer.
 """
 
-from typing import Dict, Optional
-
 from ..config import (
     DEFAULT_WHISPER_MODEL_SIZE,
     SR_AVAILABLE,
@@ -22,7 +20,7 @@ def create_recognizer(
     partial_results: bool = True,
     model_size: str = None,
     **kwargs,
-) -> Optional[BaseRecognizer]:
+) -> BaseRecognizer | None:
     """
     Tạo recognizer phù hợp dựa trên các cài đặt có sẵn.
 
@@ -77,7 +75,7 @@ def create_recognizer(
 
 
 # Singleton pattern để tái sử dụng recognizer
-_recognizer_instances: Dict[str, BaseRecognizer] = {}
+_recognizer_instances: dict[str, BaseRecognizer] = {}
 
 
 def get_or_create_recognizer(
@@ -85,7 +83,7 @@ def get_or_create_recognizer(
     sample_rate: int = 16000,
     language: str = "vi",
     **kwargs,
-) -> Optional[BaseRecognizer]:
+) -> BaseRecognizer | None:
     """
     Lấy recognizer có sẵn hoặc tạo mới nếu cần.
 
@@ -122,7 +120,7 @@ def get_or_create_recognizer(
     return _recognizer_instances[key]
 
 
-def get_available_engines() -> Dict[str, bool]:
+def get_available_engines() -> dict[str, bool]:
     """
     Lấy thông tin về các engine có sẵn.
 

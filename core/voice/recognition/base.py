@@ -3,7 +3,7 @@ Lớp cơ sở cho các speech recognizer.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar, Dict
+from typing import Any, ClassVar
 
 
 class BaseRecognizer(ABC):
@@ -15,9 +15,7 @@ class BaseRecognizer(ABC):
     # Tên của engine, được ghi đè bởi lớp con
     engine_name: ClassVar[str] = "base"
 
-    def __init__(
-        self, sample_rate: int = 16000, language: str = "vi", **kwargs
-    ):
+    def __init__(self, sample_rate: int = 16000, language: str = "vi", **kwargs):
         self.sample_rate = sample_rate
         self.language = language
 
@@ -34,7 +32,7 @@ class BaseRecognizer(ABC):
         return cls.engine_name
 
     @abstractmethod
-    def process_audio(self, audio_data: bytes) -> Dict[str, Any]:
+    def process_audio(self, audio_data: bytes) -> dict[str, Any]:
         """
         Xử lý audio data và trả về kết quả nhận dạng.
 

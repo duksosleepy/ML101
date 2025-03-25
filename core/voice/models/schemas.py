@@ -2,7 +2,7 @@
 Pydantic schemas để xác thực và chuyển đổi dữ liệu.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -39,20 +39,20 @@ class SessionInfo(BaseModel):
     channels: int
     encoding: str
     language: str
-    transcript: List[str]
+    transcript: list[str]
     current_transcript: str
     packets_received: int
     is_active: bool
     is_processing: bool
     is_speaking: bool
-    config: Dict[str, Any]
+    config: dict[str, Any]
 
 
 class TranscriptResponse(BaseModel):
     """Phản hồi về transcript của session."""
 
     session_id: str
-    transcript_history: List[str]
+    transcript_history: list[str]
     current_transcript: str
 
 
@@ -63,15 +63,15 @@ class HealthResponse(BaseModel):
     timestamp: float
     active_connections: int
     active_sessions: int
-    engines_available: Dict[str, bool]
+    engines_available: dict[str, bool]
 
 
 class WebSocketMessage(BaseModel):
     """Message được gửi qua WebSocket."""
 
     type: str
-    data: Optional[Dict[str, Any]] = None
-    timestamp: Optional[float] = None
+    data: dict[str, Any] | None = None
+    timestamp: float | None = None
 
 
 class TranscriptResult(BaseModel):

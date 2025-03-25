@@ -2,8 +2,6 @@
 Factory pattern để tạo audio input processor.
 """
 
-from typing import Dict, Optional
-
 from ..config import PYAUDIO_AVAILABLE, SR_AVAILABLE, logger
 from .base import BaseAudioInput
 from .registry import AudioInputRegistry
@@ -13,9 +11,9 @@ def create_audio_input(
     engine: str = "auto",
     sample_rate: int = 16000,
     channels: int = 1,
-    device_index: Optional[int] = None,
+    device_index: int | None = None,
     **kwargs,
-) -> Optional[BaseAudioInput]:
+) -> BaseAudioInput | None:
     """
     Tạo audio input processor phù hợp dựa trên các cài đặt có sẵn.
 
@@ -63,16 +61,16 @@ def create_audio_input(
 
 
 # Singleton pattern để tái sử dụng audio input
-_audio_input_instances: Dict[str, BaseAudioInput] = {}
+_audio_input_instances: dict[str, BaseAudioInput] = {}
 
 
 def get_or_create_audio_input(
     engine: str = "auto",
     sample_rate: int = 16000,
     channels: int = 1,
-    device_index: Optional[int] = None,
+    device_index: int | None = None,
     **kwargs,
-) -> Optional[BaseAudioInput]:
+) -> BaseAudioInput | None:
     """
     Lấy audio input có sẵn hoặc tạo mới nếu cần.
 
@@ -106,7 +104,7 @@ def get_or_create_audio_input(
     return _audio_input_instances[key]
 
 
-def get_available_engines() -> Dict[str, bool]:
+def get_available_engines() -> dict[str, bool]:
     """
     Lấy thông tin về các engine có sẵn.
 

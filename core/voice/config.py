@@ -31,9 +31,7 @@ VOSK_MODEL_MAPPING = {
 }
 
 # Cấu hình Whisper
-DEFAULT_WHISPER_MODEL_SIZE = (
-    "small"  # tiny, base, small, medium, large, large-v2
-)
+DEFAULT_WHISPER_MODEL_SIZE = "small"  # tiny, base, small, medium, large, large-v2
 WHISPER_AVAILABLE_MODELS = [
     "tiny",
     "base",
@@ -85,9 +83,7 @@ try:
 except ImportError:
     WHISPER_AVAILABLE = False
     WHISPER_GPU_AVAILABLE = False
-    logger.warning(
-        "Whisper not available. Install with: pip install openai-whisper"
-    )
+    logger.warning("Whisper not available. Install with: pip install openai-whisper")
 
 # Kiểm tra nếu không có engine nào sẵn sàng
 if not (VOSK_AVAILABLE or SR_AVAILABLE or WHISPER_AVAILABLE):

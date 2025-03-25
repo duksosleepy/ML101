@@ -5,7 +5,6 @@ WebSocket endpoints để streaming audio.
 import asyncio
 import json
 import time
-from typing import Dict
 
 from fastapi import WebSocket, WebSocketDisconnect
 
@@ -18,10 +17,10 @@ from ..models import (
 from ..utils import detect_voice_activity
 
 # Lưu trữ các kết nối WebSocket đang hoạt động
-active_connections: Dict[str, WebSocket] = {}
+active_connections: dict[str, WebSocket] = {}
 
 # Lưu trữ task transcription đang chạy
-active_transcription_tasks: Dict[str, asyncio.Task] = {}
+active_transcription_tasks: dict[str, asyncio.Task] = {}
 
 
 async def process_audio_vosk(session_id: str, websocket: WebSocket):
@@ -177,9 +176,7 @@ async def process_client_message(websocket: WebSocket, session_id: str) -> bool:
                 elif message_type == "config":
                     config = TranscriptionConfig(**message.get("data", {}))
                     session.config = config
-                    logger.info(
-                        f"Updated config for session {session_id}: {config}"
-                    )
+                    logger.info(f"Updated config for session {session_id}: {config}")
 
                 # Xử lý yêu cầu reset
                 elif message_type == "reset":
@@ -304,8 +301,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
             pass
     finally:
         # Cleanup khi kết thúc
-        if session_id in active_connections:
-            del active_connections[session_id]
+        active_connections.pop(session_id, None)
 
         # Hủy task nếu có
         if session_id in active_transcription_tasks:

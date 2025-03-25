@@ -77,27 +77,42 @@ def format(session):
 
 
 @session(python=PYTHON_VERSIONS)
-def tests(session, hatch=False, vcs=True):
+def tests(session):
     """
     Run tests with pytest.
-
-    Args:
-        hatch: Use hatch for dependency management
-        vcs: Include VCS files in the test
     """
     env = {**DEFAULT_ENV}
+
+    # Parse custom arguments
+    hatch = False
+    vcs = True
+
+    # Extract custom args and leave the rest for pytest
+    pytest_args = []
+    i = 0
+    while i < len(session.posargs):
+        arg = session.posargs[i]
+        if arg == "--hatch" or arg == "--hatch=True":
+            hatch = True
+            i += 1
+        elif arg == "--vcs=False":
+            vcs = False
+            i += 1
+        else:
+            pytest_args.append(arg)
+            i += 1
 
     # Install dependencies
     session.install("-r", "requirements.txt", "pytest", "pytest-cov")
 
     # Prepare test arguments
     test_args = ["pytest"]
-    if session.posargs:
-        test_args.extend(session.posargs)
+    if pytest_args:
+        test_args.extend(pytest_args)
     else:
         test_args.extend(["--cov=./", "--cov-report=xml"])
 
-    # For hatch tests, we need to handle dependencies differently
+    # For hatch tests, handle dependencies differently
     if hatch:
         try:
             session.install("hatch")

@@ -28,10 +28,21 @@ jobs:
           runs-on: [ubuntu-latest, windows-latest, macos-latest]
 
           include:
-            - python-version: pypy-3.12
+            # Using PyPy 3.10 as it's available in GitHub Actions
+            - python-version: "pypy-3.10"
               runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
+
+        # Install OS-specific dependencies with caching
+        - name: Cache PyAudio dependencies (Ubuntu)
+          if: runner.os == 'Linux'
+          uses: actions/cache@v3
+          with:
+            path: ~/.apt-cache
+            key: ${{ runner.os }}-apt-pyaudio-${{ hashFiles('**/requirements*.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-apt-pyaudio-
 
         - name: Install PyAudio dependencies (Ubuntu)
           if: runner.os == 'Linux'
@@ -48,6 +59,8 @@ jobs:
           with:
             python-version: ${{ matrix.python-version }}
             allow-prereleases: true
+            # Add cache for Python dependencies
+            cache: 'uv'
 
         - name: Setup uv
           uses: astral-sh/setup-uv@v5
@@ -55,39 +68,10 @@ jobs:
         - name: Install nox
           run: uv tool install nox
 
-        - name: Test hatch
+        - name: Run hatch tests
           run: |
             nox -s 'tests' -- --hatch=True --vcs=False
             nox -s 'tests' -- --hatch=True --vcs=True
-
-
-  nox:
-    name: Check included Noxfile
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install PyAudio dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pyaudio portaudio19-dev
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-          allow-prereleases: true
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v5
-
-      - name: Install nox
-        run: uv tool install nox
-
-      - name: Test hatch
-        run: |
-          nox -s 'tests' -- --hatch=True --vcs=False
-          nox -s 'tests' -- --hatch=True --vcs=True
 
   lint:
     runs-on: ubuntu-latest
@@ -99,6 +83,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'uv'
 
       - uses: tox-dev/action-pre-commit-uv@v1
 
@@ -114,6 +99,14 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Cache PyAudio dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.apt-cache
+          key: ${{ runner.os }}-apt-pyaudio-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-pyaudio-
+
       - name: Install PyAudio dependencies
         run: |
           sudo apt-get update
@@ -124,6 +117,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+          cache: 'uv'
 
       - name: Install uv
         uses: hynek/setup-cached-uv@v2

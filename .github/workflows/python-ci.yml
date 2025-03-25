@@ -92,8 +92,16 @@ jobs:
           echo "Activating virtual environment on Linux/macOS"
           source .venv/bin/activate
 
-      - name: Run hatch tests
-        shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
+      - name: Run hatch tests (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          nox -s 'tests' -- --hatch=True --vcs=False
+          nox -s 'tests' -- --hatch=True --vcs=True
+
+      - name: Run hatch tests (Linux/macOS)
+        if: runner.os != 'Windows'
+        shell: bash
         run: |
           nox -s 'tests' -- --hatch=True --vcs=False
           nox -s 'tests' -- --hatch=True --vcs=True

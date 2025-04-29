@@ -15,7 +15,9 @@ class BaseRecognizer(ABC):
     # Tên của engine, được ghi đè bởi lớp con
     engine_name: ClassVar[str] = "base"
 
-    def __init__(self, sample_rate: int = 16000, language: str = "vi", **kwargs):
+    def __init__(
+        self, sample_rate: int = 16000, language: str = "vi", **kwargs
+    ):
         self.sample_rate = sample_rate
         self.language = language
 

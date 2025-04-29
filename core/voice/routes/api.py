@@ -173,11 +173,15 @@ async def transcribe_file(
         # Xử lý transcription tùy thuộc vào loại recognizer
         if hasattr(recognizer, "transcribe_file"):
             # Dùng hàm transcribe_file nếu có (Whisper)
-            result = await asyncio.to_thread(recognizer.transcribe_file, file_path)
+            result = await asyncio.to_thread(
+                recognizer.transcribe_file, file_path
+            )
 
             # Dọn dẹp file
             background_tasks.add_task(
-                lambda: os.remove(file_path) if os.path.exists(file_path) else None
+                lambda: os.remove(file_path)
+                if os.path.exists(file_path)
+                else None
             )
             background_tasks.add_task(
                 lambda: os.rmdir(temp_dir) if os.path.exists(temp_dir) else None

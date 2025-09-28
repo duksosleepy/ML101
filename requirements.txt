@@ -43,7 +43,7 @@ frozenlist==1.5.0
 fsspec==2025.3.0
 greenlet==3.1.1 ; (python_full_version < '3.14' and platform_machine == 'AMD64') or (python_full_version < '3.14' and platform_machine == 'WIN32') or (python_full_version < '3.14' and platform_machine == 'aarch64') or (python_full_version < '3.14' and platform_machine == 'amd64') or (python_full_version < '3.14' and platform_machine == 'ppc64le') or (python_full_version < '3.14' and platform_machine == 'win32') or (python_full_version < '3.14' and platform_machine == 'x86_64')
 gunicorn==23.0.0
-h11==0.14.0
+h11==0.16.0
 httpcore==1.0.7
 httplib2==0.22.0
 httpx==0.28.1
@@ -142,7 +142,7 @@ redis==5.2.1
 reflex==0.7.1
 reflex-hosting-cli==0.1.35
 regex==2024.11.6
-requests==2.32.3
+requests==2.32.4
 requests-toolbelt==1.0.0
 rfc3986==2.0.0
 rich==13.9.4
@@ -155,7 +155,7 @@ scipy==1.15.2
 secretstorage==3.3.3 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux'
 semver==3.0.4
 sentencepiece==0.2.0
-setuptools==75.8.2
+setuptools==78.1.1
 shellingham==1.5.4
 simple-websocket==1.1.0
 six==1.17.0
@@ -181,7 +181,7 @@ threadpoolctl==3.6.0
 tokenize-rt==6.1.0
 tokenizers==0.21.1
 tomlkit==0.13.2
-torch==2.6.0
+torch==2.8.0
 torch-audiomentations==0.12.0
 torch-pitch-shift==1.2.5
 torchaudio==2.6.0
@@ -193,7 +193,7 @@ twine==6.1.0
 typer==0.15.2
 typing-extensions==4.12.2
 tzdata==2025.1
-urllib3==2.3.0
+urllib3==2.5.0
 uvicorn==0.34.0
 virtualenv==20.29.3
 vosk==0.3.45
